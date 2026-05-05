@@ -62,25 +62,11 @@ check_token() {
   echo -e "${YELLOW}MASUKAN AKSES TOKEN :${NC}"
   read -r USER_TOKEN
 
-  if [[ -f "licensekey.js" ]]; then
-    RAW_TOKEN=$(node -e "console.log(require('./licensekey.js'))")
-    # Pisahkan dengan koma, lalu loop
-    IFS=',' read -ra VALID_TOKENS <<< "$RAW_TOKEN"
-    VALID=0
-    for t in "${VALID_TOKENS[@]}"; do
-      # Hilangkan spasi di awal/akhir
-      t=$(echo "$t" | xargs)
-      if [[ "$USER_TOKEN" == "$t" ]]; then
-        VALID=1
-        break
-      fi
-    done
-  else
-    echo -e "${RED}File licensekey.js tidak ditemukan!${NC}"
-    exit 1
-  fi
+  # HARDCODE TOKEN (pisah spasi, bisa lebih dari satu)
+  VALID_TOKENS="AlbyDev AlbyInstall"
 
-  if [[ $VALID -eq 1 ]]; then
+  # Cek apakah token yang dimasukkan ada dalam daftar
+  if echo "$VALID_TOKENS" | grep -wq "$USER_TOKEN"; then
     echo -e "${GREEN}AKSES BERHASIL${NC}"
     else
     echo -e "${GREEN}Buy dulu Gih Ke AlbyDev${NC}"
